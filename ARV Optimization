@@ -1,0 +1,42 @@
+---
+title: "ARV_Optimization_LMIS"
+output: html_document
+---
+##packages
+install.packages("lubridate")
+install.packages("writexl")
+library("lubridate")
+library("tidyverse")
+library("devtools")
+library("skimr")
+library("scales")
+library("extrafont")
+library("patchwork")
+library("glamr")
+library("writexl")
+library(readxl)
+
+##Upload files and merge together
+sc_fact_april <- read_excel("LMIS Data/2020-04_SC_FACT_Data.xlsx")
+glimpse(sc_fact_april)
+ARV_products <- read_excel("LMIS Data/lmis_ARV_products_adult.xlsx")
+view(ARV_products)
+
+april_data <- merge(sc_fact_april, ARV_products, by="product")
+view(april_data)
+
+##Create MOT, wasn't able to get second bit to work
+
+april_data %>%
+  mutate(mot_ami = AMI*mot_adult) %>%
+  mutate(mot_soh = SOH*mot_adult) %>%
+  glimpse()
+  
+april_data %>%
+  mutate(mot_ami = AMI*mot_adult) %>%
+  mutate(mot_soh = SOH*mot_adult) %>%
+  mutate(mot_soh=if_else(SOH/pill count)*mot, Country %in% c("Zimbabwe", "Haiti"), mot_soh) %>%
+  view(april_data)
+
+##Save new data frame as Excel document
+write_xlsx(april_data,"LMIS Data/april_data_merged.xlsx")
