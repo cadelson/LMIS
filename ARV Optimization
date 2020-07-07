@@ -50,7 +50,4 @@ april_data %>%
   mutate(mot_soh=if_else(SOH/pill count)*mot, Country %in% c("Zimbabwe", "Haiti"), mot_soh) %>%
   mutate(mot_ami=if_else(SOH/pill count)*mot, Country %in% c("Zimbabwe", "Haiti"), mot_ami) %>%
   glimpse(april_data)
-  write_xlsx(april_data,"LMIS Data/april_data_merged.xlsx")
-
-##Save new data frame as Excel document
-write_xlsx(april_data,"LMIS Data/april_data_merged.xlsx")
+  write_xlsx(april_data,"april_data_merged.xlsx")
