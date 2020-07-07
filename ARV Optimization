@@ -2,9 +2,19 @@
 title: "ARV_Optimization_LMIS"
 output: html_document
 ---
-##packages
+
 install.packages("lubridate")
 install.packages("writexl")
+install.packages("readxl")
+install.packages("tidyverse")
+install.packages("devtools")
+install.packages("skimr")
+install.packages("scales")
+install.packages("extrafont")
+install.packages("patchwork")
+install.packages("extrafont")
+
+##packages
 library("lubridate")
 library("tidyverse")
 library("devtools")
@@ -16,13 +26,15 @@ library("glamr")
 library("writexl")
 library(readxl)
 
+
 ##Upload files and merge together
-sc_fact_april <- read_excel("LMIS Data/2020-04_SC_FACT_Data.xlsx")
+sc_fact_april <- read_excel("2020-04_SC_FACT_Data.xlsx")
 glimpse(sc_fact_april)
-ARV_products <- read_excel("LMIS Data/lmis_ARV_products_adult.xlsx")
+ARV_products <- read_excel("lmis_ARV_products_adult.xlsx")
 view(ARV_products)
 
 april_data <- merge(sc_fact_april, ARV_products, by="product")
+glimpse(april_data)
 view(april_data)
 
 ##Create MOT, wasn't able to get second bit to work
@@ -36,7 +48,9 @@ april_data %>%
   mutate(mot_ami = AMI*mot_adult) %>%
   mutate(mot_soh = SOH*mot_adult) %>%
   mutate(mot_soh=if_else(SOH/pill count)*mot, Country %in% c("Zimbabwe", "Haiti"), mot_soh) %>%
-  view(april_data)
+  mutate(mot_ami=if_else(SOH/pill count)*mot, Country %in% c("Zimbabwe", "Haiti"), mot_ami) %>%
+  glimpse(april_data)
+  write_xlsx(april_data,"LMIS Data/april_data_merged.xlsx")
 
 ##Save new data frame as Excel document
 write_xlsx(april_data,"LMIS Data/april_data_merged.xlsx")
