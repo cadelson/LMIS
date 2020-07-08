@@ -39,15 +39,8 @@ view(april_data)
 
 ##Create MOT, wasn't able to get second bit to work
 
-april_data %>%
-  mutate(mot_ami = AMI*mot_adult) %>%
-  mutate(mot_soh = SOH*mot_adult) %>%
-  glimpse()
-  
-april_data %>%
-  mutate(mot_ami = AMI*mot_adult) %>%
-  mutate(mot_soh = SOH*mot_adult) %>%
-  mutate(mot_soh=if_else(SOH/pill count)*mot, Country %in% c("Zimbabwe", "Haiti"), mot_soh) %>%
-  mutate(mot_ami=if_else(SOH/pill count)*mot, Country %in% c("Zimbabwe", "Haiti"), mot_ami) %>%
-  glimpse(april_data)
-  write_xlsx(april_data,"april_data_merged.xlsx")
+april_data_tmp <- april_data %>% 
+  mutate(mot_ami = AMI * mot_adult, mot_soh = SOH * mot_adult) %>% 
+  mutate(mot_ami = case_when(Country %in% c("Zimbabwe", "Haiti") ~ ((AMI / `pill count`)*mot_adult), TRUE ~ mot_ami),mot_soh = case_when(Country %in% c("Zimbabwe", "Haiti") ~ ((SOH / `pill count`)*mot_adult),TRUE ~ mot_soh))
+  glimpse(april_data_tmp)
+  write_xlsx(april_data_tmp,"april_data_merged3.xlsx")
