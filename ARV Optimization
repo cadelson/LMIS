@@ -37,7 +37,7 @@ april_data <- merge(sc_fact_april, ARV_products, by="product")
 glimpse(april_data)
 view(april_data)
 
-##Create MOT, wasn't able to get second bit to work
+##Create MOT factoring in countries using pill count
 
 april_data_tmp <- april_data %>% 
   mutate(mot_ami = AMI * mot_adult, mot_soh = SOH * mot_adult) %>% 
